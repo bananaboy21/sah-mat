@@ -8,7 +8,7 @@ import random
 import aiohttp
 import random
 from discord.ext import commands
-bot = commands.Bot(command_prefix=commands.when_mentioned_or('c.'),description="A specialized bot made for Balkan War Community\n\nHelp Commands",owner_id=277981712989028353)
+bot = commands.Bot(command_prefix=commands.when_mentioned_or('s.'),description="A specialized bot made for Balkan War Community\n\nHelp Commands",owner_id=277981712989028353)
 bot.remove_command("help")
 
 
@@ -17,6 +17,12 @@ bot.remove_command("help")
 async def on_ready():
     print('Bot is online, and ready to ROLL!')
     await bot.change_presence(game=discord.Game(name="c.help"))
+	
+	
+@bot.event
+async def on_command_error(ctx, error):
+	if isinstance(error, commands.MissingPermissions):
+		return await ctx.send("Nope. You don't have enough permissions.")
 
 
 @bot.command()
@@ -24,7 +30,6 @@ async def help(ctx):
 	color = discord.Color(value=0x00ff00)
 	em = discord.Embed(color=color, title="Balkan War Community Bot Help")
 	em.add_field(name='ping', value="Gets the bot's websocket latency.")
-	em.add_field(name='invite', value='Gets an invite link to add the bot to your server!')
 	em.add_field(name='kick [mention user]', value='Kicks a member. Requires the Kick Members permission.')
 	em.add_field(name='ban [mention user]', value='Bans a member. Requires the Ban Members permission.')
 	em.add_field(name='purge [number of msgs]', value='Deletes a number of messages. Requires the Manage Messages permission.')
